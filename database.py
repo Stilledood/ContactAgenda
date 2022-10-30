@@ -13,6 +13,8 @@ def create_check_database():
 
 
     if ('agenda',) in mycursor:
+        
+
         return
     else:
         mycursor.execute('USE agenda')
@@ -25,7 +27,9 @@ def create_check_database():
                          "last_name VARCHAR(255) DEFAULT 'no name' ,"
                          "email VARCHAR(255),"
                          "phone VARCHAR(25),"
-                         "adress VARCHAR(255))")
+                         "adress VARCHAR(255)),"
+                         "city VARCHAR(255),"
+                         "country VARCHAR(255)")
 
         #Creating the events table
         mycursor.execute("CREATE TABLE events(id INT PRIMARY KEY AUTO_INCREMENT ,"
@@ -37,6 +41,9 @@ def create_check_database():
         #Commiting all the changes
         mycursor.commit()
         mycursor.close()
+
+
+
 
 
 
