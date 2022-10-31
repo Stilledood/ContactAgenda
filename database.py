@@ -86,9 +86,6 @@ def add_contact(first_name,last_name,email,phone,adress,city,country):
 
 
 
-create_check_database()
-add_contact('Florin','Corciova','f@gmail.com','21212121','asassa','Bucharest','Romania')
-display_all_contacts()
 
 
 
