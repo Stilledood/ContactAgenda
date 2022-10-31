@@ -77,7 +77,6 @@ def add_contact(first_name, last_name, email,phone, adress, city, country):
     #Adding the contact
     sql_query = "INSERT INTO contacts(first_name,last_name,email,phone,adress,city,country) VALUES(%s, %s, %s, %s, %s, %s ,%s)"
     val = (first_name, last_name, email, phone, adress, city, country)
-    print(sql_query)
     mycursor.execute(sql_query, val)
     mydb.commit()
 
@@ -102,7 +101,16 @@ def fetch_all_events():
 
 
 
-fetch_all_events()
+def add_event(title, description, finalizing_date):
+    '''Function to add an evnet on the event table'''
+
+    mydb = mysql.connector.connect(host='localhost', user=username, password=password, database='personalagenda')
+    sql_query = "INSERT INTO events(title,description,finalizing_date) VALUES(%s, %s, %s)"
+    val = (title, description, finalizing_date)
+    mycursor = mydb.cursor()
+    mycursor.execute(sql_query, val)
+    mydb.commit()
+    mycursor.close()
 
 
 
