@@ -27,10 +27,7 @@ def create_check_database():
                          first_name VARCHAR(255) DEFAULT 'no name',
                          last_name VARCHAR(255) DEFAULT 'no name' ,
                          email VARCHAR(255),
-                         phone VARCHAR(25),
-                         adress VARCHAR(255),
-                         city VARCHAR(255),
-                         country VARCHAR(255))"""
+                         phone VARCHAR(25))"""
                          )
 
         mycursor.close()
@@ -63,20 +60,21 @@ def display_all_contacts():
     mycursor.close()
     for record in records:
         print(record)
+    return records
 
 
 
 
 
 
-def add_contact(first_name, last_name, email,phone, adress, city, country):
+def add_contact(first_name, last_name, email,phone):
     '''Function to add a contact in table contacts'''
 
     mydb = mysql.connector.connect(host='localhost', user=username, password=password, database='personalagenda')
     mycursor = mydb.cursor()
     #Adding the contact
-    sql_query = "INSERT INTO contacts(first_name,last_name,email,phone,adress,city,country) VALUES(%s, %s, %s, %s, %s, %s ,%s)"
-    val = (first_name, last_name, email, phone, adress, city, country)
+    sql_query = "INSERT INTO contacts(first_name,last_name,email,phone) VALUES(%s, %s, %s, %s)"
+    val = (first_name, last_name, email, phone)
     mycursor.execute(sql_query, val)
     mydb.commit()
 
@@ -111,7 +109,6 @@ def add_event(title, description, finalizing_date):
     mycursor.execute(sql_query, val)
     mydb.commit()
     mycursor.close()
-
 
 
 
