@@ -4,11 +4,13 @@ from tkinter.messagebox import showinfo
 import database
 
 
+
 class SampleApp(tk.Tk):
     '''Class to control all windows from entire app'''
 
     def __init__(self):
         tk.Tk.__init__(self)
+        self.geometry('800x600')
         self._frame=None
         self.switch_frame(StartPage)
 
@@ -38,24 +40,49 @@ class StartPage(tk.Frame):
 class Contacts(tk.Frame):
     '''Class to construct the tkinter window to display all the contacts from database'''
 
+    contact_to_be_displayed=None
+
     def __init__(self,master):
         tk.Frame.__init__(self,master)
+        self.master=master
+
+        # Check if the database exists-if not-create the database and tables
         database.create_check_database()
         self.contacts=database.display_all_contacts()
+
         tk.Label(self,text='Contacts').pack(side='top', fill='x',pady= 0)
-        self.tree=ttk.Treeview(columns=('First Name', 'Last Name', 'Email', 'Phone' ), show='headings')
-        self.tree.heading('First Name',text='First Name')
-        self.tree.heading('Last Name', text='Last Name')
-        self.tree.heading('Email', text='Email')
-        self.tree.heading('Phone', text='Phone')
+        # Adding labels for conatct updating/adding form
+        self.label_contact_first_name = tk.Label(self.master,text='First Name', font=('Helvetica',8)).place(rely=0.2,relx=0.4,anchor='ne')
+        self.label_contact_last_name = tk.Label(self.master,text='Last Name', font =('Helvetica', 8)).place(rely=0.25, relx=0.4, anchor='ne')
+        self.label_contact_email = tk.Label(self.master, text='Email', font=('Helvetica', 8) ).place(rely=0.3, relx=0.367, anchor='ne')
+        self.label_contact_phone = tk.Label(self.master, text='Phone', font=('Helvetica', 8)).place(rely=0.35, relx=0.372, anchor='ne')
 
-        try:
-            for contact in self.contacts:
-                self.tree.insert("",'end',values=(contact[1],contact[2],contact[3],contact[4]))
-        except:
-            pass
+        #Adding entries for updating/adding contacts
 
-        self.tree.pack()
+        self.entry_contact_first_name = tk.Entry(self.master).place(rely=0.2,relx=0.6,relheight=0.028,anchor='ne')
+        self.entry_contact_last_name = tk.Entry(self.master).place(rely=0.25, relx=0.6,relheight=0.028, anchor='ne')
+        self.entry_contact_email = tk.Entry(self.master).place(rely=0.3, relx=0.6, relheight=0.028, anchor='ne')
+        self.entry_contact_phone = tk.Entry(self.master).place(rely=0.35, relx=0.6, relheight=0.028, anchor='ne')
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
