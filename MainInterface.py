@@ -89,11 +89,18 @@ class Contacts(tk.Frame):
         self.contact_display.column('Phone', width=70)
 
         #Adding scrollbar
-
         self.scrool_bar = ttk.Scrollbar(self.master, orient=tk.VERTICAL, command= self.contact_display.yview)
         self.scrool_bar.place(x=350, y= 400 ,width=640)
         self.contact_display.configure(xscrollcommand=self.scrool_bar.set)
-        
+
+
+
+        #Adding A search bar and button-to search contacts by last name
+        self.search_button = tk.Button(self.master, text='Search By Last Name', font=('Helvetica', 8), bg='grey', fg='white' ).place(rely=0.9,relx=0.45,anchor='ne')
+        self.search_bar= tk.Entry(self.master).place(rely=0.9 , relx=0.75, relheight=0.035, relwidth=0.25, anchor='ne')
+
+
+
 
 
 
