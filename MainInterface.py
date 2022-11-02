@@ -87,6 +87,7 @@ class Contacts(tk.Frame):
         self.contact_display.column('Email', width=70)
         self.contact_display.heading('Phone', text='Phone Number', anchor='center')
         self.contact_display.column('Phone', width=70)
+        self.contact_display.bind(self.display_selected_contacts())
 
         #Adding scrollbar
         self.scrool_bar = ttk.Scrollbar(self.master, orient=tk.VERTICAL, command= self.contact_display.yview)
@@ -94,10 +95,30 @@ class Contacts(tk.Frame):
         self.contact_display.configure(xscrollcommand=self.scrool_bar.set)
 
 
-
         #Adding A search bar and button-to search contacts by last name
-        self.search_button = tk.Button(self.master, text='Search By Last Name', font=('Helvetica', 8), bg='grey', fg='white' ).place(rely=0.9,relx=0.45,anchor='ne')
-        self.search_bar= tk.Entry(self.master).place(rely=0.9 , relx=0.75, relheight=0.035, relwidth=0.25, anchor='ne')
+
+        self.search_button = tk.Button(self.master, text='Search By Last Name', font=('Helvetica', 8), bg='grey', fg='white' ,command=self.display_searched_contacts).place(rely=0.9,relx=0.45,anchor='ne')
+        self.search_bar= tk.Entry(self.master)
+        self.search_bar.place(rely=0.9 , relx=0.75, relheight=0.035, relwidth=0.25, anchor='ne')
+
+
+
+    def display_selected_contacts(self):
+
+        contacts = database.display_all_contacts()
+        for contact in contacts:
+            self.contact_display.insert('', 'end',values = (contact[0], contact[1], contact[2], contact[3], contact[4]))
+
+    def display_searched_contacts(self):
+        contact_last_name = self.search_bar.get()
+        records=database.search_contact(contact_last_name)
+        if records:
+            self.contact_display.delete(*self.contact_display.get_children())
+            for contact in records:
+                self.contact_display.insert('','end', values=(contact[0], contact[1], contact[2], contact[3], contact[4]))
+        else:
+            pass
+
 
 
 
