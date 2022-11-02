@@ -74,10 +74,11 @@ class Contacts(tk.Frame):
         self.clear_data= tk.Button(self.master, text='Clear', font=('Helvetica', 8),bg='grey', fg='white').place(rely=0.45, relx=0.70, anchor='ne')
 
         #Adding a tree to display contacts from database
-        columns = ('First Name', 'Last Name', 'Email', 'Phone')
+        columns = ('Id','First Name', 'Last Name', 'Email', 'Phone')
         self.contact_display = ttk.Treeview(self.master, show='headings',height='10', columns=columns)
-        self.contact_display.place(rely=0.7,relx=0.5,width=500,anchor='center')
-
+        self.contact_display.place(rely=0.7,relx=0.5,width=540,anchor='center')
+        self.contact_display.heading('Id', text= 'Id', anchor='center')
+        self.contact_display.column('Id', width=70)
         self.contact_display.heading('First Name', text='First Name', anchor='center')
         self.contact_display.column('First Name',width=70)
         self.contact_display.heading('Last Name', text='Last Name', anchor='center')
@@ -86,6 +87,13 @@ class Contacts(tk.Frame):
         self.contact_display.column('Email', width=70)
         self.contact_display.heading('Phone', text='Phone Number', anchor='center')
         self.contact_display.column('Phone', width=70)
+
+        #Adding scrollbar
+
+        self.scrool_bar = ttk.Scrollbar(self.master, orient=tk.VERTICAL, command= self.contact_display.yview)
+        self.scrool_bar.place(x=350, y= 400 ,width=640)
+        self.contact_display.configure(xscrollcommand=self.scrool_bar.set)
+        
 
 
 
