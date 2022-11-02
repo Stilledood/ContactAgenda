@@ -81,6 +81,22 @@ def add_contact(first_name, last_name, email,phone):
     mycursor.close()
 
 
+def search_contact(last_name):
+    '''Function to search contacts based on last name'''
+
+    mydb = mysql.connector.connect(host='localhost', user=username, password=password, database='personalagenda')
+    my_cursor = mydb.cursor()
+    sql_query = 'SELECT * FROM contacts WHERE last_name = %s'
+    val=(last_name,)
+    my_cursor.execute(sql_query,val)
+    records = my_cursor.fetchall()
+    if records:
+        return records
+    else:
+        records =[]
+        return records
+
+
 
 def fetch_all_events():
     '''Function to fetch all events from events table'''
@@ -109,8 +125,6 @@ def add_event(title, description, finalizing_date):
     mycursor.execute(sql_query, val)
     mydb.commit()
     mycursor.close()
-
-
 
 
 
