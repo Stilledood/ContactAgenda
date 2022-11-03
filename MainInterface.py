@@ -73,7 +73,7 @@ class Contacts(tk.Frame):
         #Adding buttons to add/updarte /delete a contact and to clear the form
 
         self.add_button=tk.Button(self.master, text='Add Contact' ,font=('Helvetica', 8), bg='grey', fg='white',command=self.add_contact).place(rely=0.45,relx=0.4,anchor='ne')
-        self.update_contact=tk.Button(self.master, text= 'Update Contact', font=('Helvetica', 8),bg= 'grey', fg= 'white').place(rely=0.45, relx=0.52, anchor='ne')
+        self.update_contact=tk.Button(self.master, text= 'Update Contact', font=('Helvetica', 8),bg= 'grey', fg= 'white',command=self.update_contact).place(rely=0.45, relx=0.52, anchor='ne')
         self.delete_contact = tk.Button(self.master, text='Delete Contact', font=('Helvetica', 8), bg='grey', fg='white').place(rely=0.45, relx=0.64,anchor='ne')
         self.clear_data= tk.Button(self.master, text='Clear', font=('Helvetica', 8),bg='grey', fg='white').place(rely=0.45, relx=0.70, anchor='ne')
 
@@ -137,7 +137,7 @@ class Contacts(tk.Frame):
             self.contact_display.insert('','end',values=(record[0], record[1], record[2], record[3], record[4]))
 
     def clear_form(self):
-        '''Function to delete all ther data present in the form'''
+        '''Method to delete all ther data present in the form'''
 
         self.entry_contact_first_name.delete(0,tk.END)
         self.entry_contact_last_name.delete(0,tk.END)
@@ -145,7 +145,7 @@ class Contacts(tk.Frame):
         self.entry_contact_phone.delete(0,tk.END)
 
     def show_selected_contact(self,event):
-        '''Function to display contact details in form'''
+        '''Method to display contact details in form'''
 
         self.clear_form()
         for selection in self.contact_display.selection():
@@ -156,6 +156,22 @@ class Contacts(tk.Frame):
             self.entry_contact_last_name.insert(0,last_name)
             self.entry_contact_email.insert(0, email)
             self.entry_contact_phone.insert(0 ,phone)
+
+    def update_contact(self):
+        '''Method to update selected contact'''
+
+        contact_id=id_num
+        contact_first_name = self.entry_contact_first_name.get()
+        contact_last_name = self.entry_contact_last_name.get()
+        contact_email = self.entry_contact_email.get()
+        contact_phone = self.entry_contact_phone.get()
+        if contact_first_name:
+            database.update_contact(contact_id, contact_first_name, contact_last_name, contact_email, contact_phone)
+        contacts=database.display_all_contacts()
+        self.contact_display.delete(*self.contact_display.get_children())
+        for contact in contacts:
+            self.contact_display.insert('', 'end' ,values=(contact[0], contact[1], contact[2], contact[3], contact[4]))
+
 
 
 
