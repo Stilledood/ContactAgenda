@@ -60,15 +60,19 @@ class Contacts(tk.Frame):
 
         #Adding entries for updating/adding contacts
 
-        self.entry_contact_first_name = tk.Entry(self.master).place(rely=0.2,relx=0.6,relheight=0.028,anchor='ne')
-        self.entry_contact_last_name = tk.Entry(self.master).place(rely=0.25, relx=0.6,relheight=0.028, anchor='ne')
-        self.entry_contact_email = tk.Entry(self.master).place(rely=0.3, relx=0.6, relheight=0.028, anchor='ne')
-        self.entry_contact_phone = tk.Entry(self.master).place(rely=0.35, relx=0.6, relheight=0.028, anchor='ne')
+        self.entry_contact_first_name = tk.Entry(self.master)
+        self.entry_contact_first_name.place(rely=0.2,relx=0.6,relheight=0.028,anchor='ne')
+        self.entry_contact_last_name = tk.Entry(self.master)
+        self.entry_contact_last_name.place(rely=0.25, relx=0.6,relheight=0.028, anchor='ne')
+        self.entry_contact_email = tk.Entry(self.master)
+        self.entry_contact_email.place(rely=0.3, relx=0.6, relheight=0.028, anchor='ne')
+        self.entry_contact_phone = tk.Entry(self.master)
+        self.entry_contact_phone.place(rely=0.35, relx=0.6, relheight=0.028, anchor='ne')
 
 
         #Adding buttons to add/updarte /delete a contact and to clear the form
 
-        self.add_button=tk.Button(self.master, text='Add Contact' ,font=('Helvetica', 8), bg='grey', fg='white').place(rely=0.45,relx=0.4,anchor='ne')
+        self.add_button=tk.Button(self.master, text='Add Contact' ,font=('Helvetica', 8), bg='grey', fg='white',command=self.add_contact).place(rely=0.45,relx=0.4,anchor='ne')
         self.update_contact=tk.Button(self.master, text= 'Update Contact', font=('Helvetica', 8),bg= 'grey', fg= 'white').place(rely=0.45, relx=0.52, anchor='ne')
         self.delete_contact = tk.Button(self.master, text='Delete Contact', font=('Helvetica', 8), bg='grey', fg='white').place(rely=0.45, relx=0.64,anchor='ne')
         self.clear_data= tk.Button(self.master, text='Clear', font=('Helvetica', 8),bg='grey', fg='white').place(rely=0.45, relx=0.70, anchor='ne')
@@ -91,7 +95,7 @@ class Contacts(tk.Frame):
 
         #Adding scrollbar
         self.scrool_bar = ttk.Scrollbar(self.master, orient=tk.VERTICAL, command= self.contact_display.yview)
-        self.scrool_bar.place(x=350, y= 400 ,width=640)
+        self.scrool_bar.place(x=650, y= 400 ,width=40)
         self.contact_display.configure(xscrollcommand=self.scrool_bar.set)
 
 
@@ -118,6 +122,23 @@ class Contacts(tk.Frame):
                 self.contact_display.insert('','end', values=(contact[0], contact[1], contact[2], contact[3], contact[4]))
         else:
             pass
+
+    def add_contact(self):
+
+        contact_first_name = self.entry_contact_first_name.get()
+        contact_last_name = self.entry_contact_last_name.get()
+        contact_email = self.entry_contact_email.get()
+        contact_phone = self.entry_contact_phone.get()
+        database.add_contact(first_name=contact_first_name, last_name=contact_last_name, email=contact_email, phone=contact_phone)
+        self.contact_display.delete(*self.contact_display.get_children())
+        new_records = database.display_all_contacts()
+        for record in new_records:
+            self.contact_display.insert('','end',values=(record[0], record[1], record[2], record[3], record[4]))
+            
+
+
+
+
 
 
 
