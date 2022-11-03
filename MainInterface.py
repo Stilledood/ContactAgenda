@@ -92,10 +92,11 @@ class Contacts(tk.Frame):
         self.contact_display.heading('Phone', text='Phone Number', anchor='center')
         self.contact_display.column('Phone', width=70)
         self.contact_display.bind(self.display_selected_contacts())
+        self.contact_display.bind("<<TreeviewSelect>>",self.show_selected_contact)
 
         #Adding scrollbar
         self.scrool_bar = ttk.Scrollbar(self.master, orient=tk.VERTICAL, command= self.contact_display.yview)
-        self.scrool_bar.place(x=650, y= 400 ,width=40)
+        self.scrool_bar.place(x=660, y= 400 ,width=20)
         self.contact_display.configure(xscrollcommand=self.scrool_bar.set)
 
 
@@ -134,7 +135,30 @@ class Contacts(tk.Frame):
         new_records = database.display_all_contacts()
         for record in new_records:
             self.contact_display.insert('','end',values=(record[0], record[1], record[2], record[3], record[4]))
-            
+
+    def clear_form(self):
+        '''Function to delete all ther data present in the form'''
+
+        self.entry_contact_first_name.delete(0,tk.END)
+        self.entry_contact_last_name.delete(0,tk.END)
+        self.entry_contact_email.delete(0,tk.END)
+        self.entry_contact_phone.delete(0,tk.END)
+
+    def show_selected_contact(self,event):
+        '''Function to display contact details in form'''
+
+        self.clear_form()
+        for selection in self.contact_display.selection():
+            item = self.contact_display.item(selection)
+            global id_num
+            id_num, first_name, last_name, email, phone = item['values'][:5]
+            self.entry_contact_first_name.insert(0,first_name)
+            self.entry_contact_last_name.insert(0,last_name)
+            self.entry_contact_email.insert(0, email)
+            self.entry_contact_phone.insert(0 ,phone)
+
+
+
 
 
 
