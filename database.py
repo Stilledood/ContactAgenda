@@ -91,10 +91,28 @@ def search_contact(last_name):
     my_cursor.execute(sql_query,val)
     records = my_cursor.fetchall()
     if records:
+        my_cursor.close()
         return records
+
     else:
         records =[]
+        my_cursor.close()
         return records
+
+
+
+def update_contact(id, first_name, last_name, email, phone):
+    '''Function to update a contact from contacts table'''
+
+    mydb = mysql.connector.connect(host='localhost', user=username, password=password, database='personalagenda')
+    my_cursor = mydb.cursor()
+    mysql_query = 'UPDATE contacts SET first_name = %s , last_name = %s , email = %s, phone = %s WHERE id = %s'
+    vals=(first_name, last_name, email, phone ,id)
+    my_cursor.execute(mysql_query, vals)
+    mydb.commit()
+    my_cursor.close()
+
+
 
 
 
@@ -107,11 +125,12 @@ def fetch_all_events():
     try:
         mycursor.execute(sql_query)
         records = mycursor.fetchall()
+        mycursor.close()
     except:
         records = 'No events added'
     if not records:
         records = 'No events added'
-    print(records)
+
 
 
 
@@ -132,3 +151,4 @@ def add_event(title, description, finalizing_date):
 
 
 
+update_contact(1,'florin', 'corciova', 'f@gmail.com', '12345678')
