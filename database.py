@@ -113,6 +113,20 @@ def update_contact(id, first_name, last_name, email, phone):
     my_cursor.close()
 
 
+def delete_contact(id):
+    '''Function to delete a entry from contacts table base on the id value'''
+
+    mydb= mysql.connector.connect(host='localhost', user=username, password=password, database='personalagenda')
+    my_cursor = mydb.cursor()
+
+    mysql_query = 'DELETE FROM contacts WHERE id = %s'
+    val=(id,)
+
+    my_cursor.execute(mysql_query,val)
+    mydb.commit()
+    my_cursor.close()
+
+
 
 
 
@@ -130,6 +144,8 @@ def fetch_all_events():
         records = 'No events added'
     if not records:
         records = 'No events added'
+
+
 
 
 
