@@ -204,6 +204,7 @@ class Planner(tk.Frame):
     def __init__(self,master):
         tk.Frame.__init__(self,master)
         self.master=master
+        tasks = database.fetch_all_events()
         self.name = tk.Label(text='Tasks' ,font=('Helvetica' ,12)).pack(side='top',padx=0, fill='x' )
         today = datetime.date.today()
         self.calendar=Calendar(self.master, selectmode='day', year=today.year, month=today.month, day=today.day, font=('Helvetica', 10), headersbackground ='light grey', headersforeground='black')
@@ -225,15 +226,29 @@ class Planner(tk.Frame):
         self.tasks_view = ttk.Treeview(self.master, show='headings',height=10, columns=columns)
         self.tasks_view.place(rely=0.6, relx=0.85, anchor='ne', width=540)
         self.tasks_view.heading('Id', text= 'Id', anchor='center')
-        self.tasks_view.column('Id', width=70)
+        self.tasks_view.column('Id', width=70, anchor='center')
         self.tasks_view.heading('Task', text='Task', anchor='center')
-        self.tasks_view.column('Task', width=70)
+        self.tasks_view.column('Task', width=70, anchor='center')
         self.tasks_view.heading('Description', text='Description', anchor='center')
-        self.tasks_view.column('Description', width=70)
+        self.tasks_view.column('Description', width=70,anchor='center')
         self.tasks_view.heading('Date Added', text='Date Added', anchor='center')
-        self.tasks_view.column('Date Added', width=70)
+        self.tasks_view.column('Date Added', width=70, anchor='center')
         self.tasks_view.heading('Due Date', text='Due Date', anchor='center')
-        self.tasks_view.column('Due Date', width=70)
+        self.tasks_view.column('Due Date', width=70, anchor='center')
+        self.tasks_view.bind(self.display_all_tasks())
+
+
+    def display_all_tasks(self):
+        '''Method to populate Treeview with tasks from MySQL events table'''
+
+        tasks = database.fetch_all_events()
+        if tasks:
+            for task in tasks:
+                print(task[3].date())
+                self.tasks_view.insert('', 'end', values=(task[0], task[1], task[2], task[3].date(), task[4].date()))
+
+
+
 
 
 

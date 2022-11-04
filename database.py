@@ -141,9 +141,8 @@ def fetch_all_events():
         records = mycursor.fetchall()
         mycursor.close()
     except:
-        records = 'No events added'
-    if not records:
-        records = 'No events added'
+        records = []
+    return records
 
 
 
