@@ -75,7 +75,8 @@ class Contacts(tk.Frame):
         self.add_button=tk.Button(self.master, text='Add Contact' ,font=('Helvetica', 8), bg='grey', fg='white',command=self.add_contact).place(rely=0.45,relx=0.4,anchor='ne')
         self.update_contact=tk.Button(self.master, text= 'Update Contact', font=('Helvetica', 8),bg= 'grey', fg= 'white',command=self.update_contact).place(rely=0.45, relx=0.52, anchor='ne')
         self.delete_contact = tk.Button(self.master, text='Delete Contact', font=('Helvetica', 8), bg='grey', fg='white', command=self.delete_contact).place(rely=0.45, relx=0.64,anchor='ne')
-        self.clear_data= tk.Button(self.master, text='Clear', font=('Helvetica', 8),bg='grey', fg='white').place(rely=0.45, relx=0.70, anchor='ne')
+        self.clear_data= tk.Button(self.master, text='Clear', font=('Helvetica', 8),bg='grey', fg='white', command=self.clear_form).place(rely=0.45, relx=0.70, anchor='ne')
+        
 
         #Adding a tree to display contacts from database
         columns = ('Id','First Name', 'Last Name', 'Email', 'Phone')
@@ -191,6 +192,9 @@ class Contacts(tk.Frame):
 
         for contact in contacts :
             self.contact_display.insert('', 'end', values=(contact[0], contact[1], contact[2], contact[3], contact[4]))
+
+
+
 
 
 
