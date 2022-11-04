@@ -238,7 +238,12 @@ class Planner(tk.Frame):
         self.tasks_view.bind(self.display_all_tasks())
 
         #Adding labels to display selected task
-        
+        self.label_task_name = tk.Label(self.master, text='Task', font=('Helvetica', 8))
+        self.label_task_name.place(relx=0.2, rely=0.42, anchor='ne')
+        self.label_task_description = tk.Label(self.master, text='Description', font=('Helvetica', 8))
+        self.label_task_description.place(relx=0.2, rely=0.46, anchor='ne')
+        self.label_task_due_date = tk.Label(self.master, text='Due Date', font=('Helvetica', 8))
+        self.label_task_due_date.place(relx=0.2, rely=0.5, anchor='ne')
 
 
 
