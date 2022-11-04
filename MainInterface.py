@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import ttk
 import tkinter.messagebox as mb
+from tkcalendar import Calendar
+import datetime
 import database
 
 
@@ -80,7 +82,7 @@ class Contacts(tk.Frame):
 
         #Adding a tree to display contacts from database
         columns = ('Id','First Name', 'Last Name', 'Email', 'Phone')
-        self.contact_display = ttk.Treeview(self.master, show='headings',height='10', columns=columns)
+        self.contact_display = ttk.Treeview(self.master, show='headings',height=10, columns=columns)
         self.contact_display.place(rely=0.7,relx=0.5,width=540,anchor='center')
         self.contact_display.heading('Id', text= 'Id', anchor='center')
         self.contact_display.column('Id', width=70)
@@ -192,6 +194,32 @@ class Contacts(tk.Frame):
 
         for contact in contacts :
             self.contact_display.insert('', 'end', values=(contact[0], contact[1], contact[2], contact[3], contact[4]))
+
+
+
+
+class Planner(tk.Frame):
+    '''Class to construct the window to display all planned events stored in the database'''
+
+    def __init__(self,master):
+        tk.Frame.__init__(self,master)
+        self.master=master
+        self.name = tk.Label(text='Tasks' ,font=('Helvetica' ,12)).pack(side='top',padx=0, fill='x' )
+        today = datetime.date.today()
+        self.calendar=Calendar(self.master, selectmode='day', year=today.year, month=today.month, day=today.day, font=('Helvetica', 10), headersbackground ='light grey', headersforeground='black')
+        self.calendar.place(rely=0.1, relx=0.67, anchor='ne')
+        # Adding buttons to display selected tasks based on day,month,year
+        self.daily_task_button = tk.Button(self.master, text='Today Tasks', font=('Helvetica', 8), bg='grey', fg='white')
+        self.daily_task_button.place(rely=0.45, relx=0.32, anchor='ne')
+        self.weekly_task_button = tk.Button(self.master, text='Weekly Tasks', font=('Helvetica', 8), bg='grey', fg='white')
+        self.weekly_task_button.place(rely=0.45, relx=0.44, anchor='ne')
+        self.monthly_task_button = tk.Button(self.master, text='Monthly Tasks', font=('Helvetica', 8), bg='grey', fg='white')
+        self.monthly_task_button.place(rely=0.45, relx=0.56, anchor='ne')
+        self.day_search_button = tk.Button(self.master, text='Day Search', font=('Helvetica', 8), bg='grey', fg='white')
+        self.day_search_button.place(rely=0.45, relx=0.67, anchor='ne' )
+        self.month_search_button = tk.Button(self.master, text='Month Search', font=('Helvetica', 8), bg='grey', fg='white')
+        self.month_search_button.place(rely=0.45, relx=0.79, anchor='ne')
+
 
 
 
