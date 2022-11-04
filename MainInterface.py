@@ -220,6 +220,22 @@ class Planner(tk.Frame):
         self.month_search_button = tk.Button(self.master, text='Month Search', font=('Helvetica', 8), bg='grey', fg='white')
         self.month_search_button.place(rely=0.45, relx=0.79, anchor='ne')
 
+        #Adding a Tree view to display tasks from events table
+        columns=('Id', 'Task', 'Description', 'Date Added', 'Due Date')
+        self.tasks_view = ttk.Treeview(self.master, show='headings',height=10, columns=columns)
+        self.tasks_view.place(rely=0.6, relx=0.85, anchor='ne', width=540)
+        self.tasks_view.heading('Id', text= 'Id', anchor='center')
+        self.tasks_view.column('Id', width=70)
+        self.tasks_view.heading('Task', text='Task', anchor='center')
+        self.tasks_view.column('Task', width=70)
+        self.tasks_view.heading('Description', text='Description', anchor='center')
+        self.tasks_view.column('Description', width=70)
+        self.tasks_view.heading('Date Added', text='Date Added', anchor='center')
+        self.tasks_view.column('Date Added', width=70)
+        self.tasks_view.heading('Due Date', text='Due Date', anchor='center')
+        self.tasks_view.column('Due Date', width=70)
+
+
 
 
 
