@@ -208,18 +208,18 @@ class Planner(tk.Frame):
         self.name = tk.Label(text='Tasks' ,font=('Helvetica' ,12)).pack(side='top',padx=0, fill='x' )
         today = datetime.date.today()
         self.calendar=Calendar(self.master, selectmode='day', year=today.year, month=today.month, day=today.day, font=('Helvetica', 10), headersbackground ='light grey', headersforeground='black')
-        self.calendar.place(rely=0.1, relx=0.67, anchor='ne')
+        self.calendar.place(rely=0.1, relx=0.58, anchor='ne')
         # Adding buttons to display selected tasks based on day,month,year
-        self.daily_task_button = tk.Button(self.master, text='Today Tasks', font=('Helvetica', 8), bg='grey', fg='white')
-        self.daily_task_button.place(rely=0.45, relx=0.32, anchor='ne')
-        self.weekly_task_button = tk.Button(self.master, text='Weekly Tasks', font=('Helvetica', 8), bg='grey', fg='white')
-        self.weekly_task_button.place(rely=0.45, relx=0.44, anchor='ne')
-        self.monthly_task_button = tk.Button(self.master, text='Monthly Tasks', font=('Helvetica', 8), bg='grey', fg='white')
-        self.monthly_task_button.place(rely=0.45, relx=0.56, anchor='ne')
-        self.day_search_button = tk.Button(self.master, text='Day Search', font=('Helvetica', 8), bg='grey', fg='white')
-        self.day_search_button.place(rely=0.45, relx=0.67, anchor='ne' )
-        self.month_search_button = tk.Button(self.master, text='Month Search', font=('Helvetica', 8), bg='grey', fg='white')
-        self.month_search_button.place(rely=0.45, relx=0.79, anchor='ne')
+        self.daily_task_button = tk.Button(self.master, text='Today Tasks', font=('Helvetica', 8), bg='grey', fg='white', width=15)
+        self.daily_task_button.place(rely=0.1, relx=0.8, anchor='ne')
+        self.weekly_task_button = tk.Button(self.master, text='Weekly Tasks', font=('Helvetica', 8), bg='grey', fg='white', width=15)
+        self.weekly_task_button.place(rely=0.165, relx=0.8, anchor='ne')
+        self.monthly_task_button = tk.Button(self.master, text='Monthly Tasks', font=('Helvetica', 8), bg='grey', fg='white', width=15)
+        self.monthly_task_button.place(rely=0.23, relx=0.8, anchor='ne')
+        self.day_search_button = tk.Button(self.master, text='Day Search', font=('Helvetica', 8), bg='grey', fg='white', width=15)
+        self.day_search_button.place(rely=0.295, relx=0.8, anchor='ne' )
+        self.month_search_button = tk.Button(self.master, text='Month Search', font=('Helvetica', 8), bg='grey', fg='white', width=15)
+        self.month_search_button.place(rely=0.36, relx=0.8, anchor='ne')
 
         #Adding a Tree view to display tasks from events table
         columns=('Id', 'Task', 'Description', 'Date Added', 'Due Date')
@@ -236,6 +236,10 @@ class Planner(tk.Frame):
         self.tasks_view.heading('Due Date', text='Due Date', anchor='center')
         self.tasks_view.column('Due Date', width=70, anchor='center')
         self.tasks_view.bind(self.display_all_tasks())
+
+        #Adding labels to display selected task
+        
+
 
 
     def display_all_tasks(self):
