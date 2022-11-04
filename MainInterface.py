@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter.messagebox import showinfo
+import tkinter.messagebox as mb
 import database
 
 
@@ -165,8 +165,12 @@ class Contacts(tk.Frame):
         contact_last_name = self.entry_contact_last_name.get()
         contact_email = self.entry_contact_email.get()
         contact_phone = self.entry_contact_phone.get()
+        confirm_box = mb.askquestion('Update Contact','Are you sure you want to update the selected contact?')
         if contact_first_name:
-            database.update_contact(contact_id, contact_first_name, contact_last_name, contact_email, contact_phone)
+            if confirm_box == 'yes':
+                database.update_contact(contact_id, contact_first_name, contact_last_name, contact_email, contact_phone)
+            else:
+                return
         contacts=database.display_all_contacts()
         self.contact_display.delete(*self.contact_display.get_children())
         for contact in contacts:
@@ -176,8 +180,11 @@ class Contacts(tk.Frame):
         '''Method to delete selected contact'''
 
         contact_id = id_num
-        database.delete_contact(contact_id)
-
+        confirm_box = mb.askquestion('Delete Contact','Are you sure you want to delete this contact?')
+        if confirm_box == 'yes':
+            database.delete_contact(contact_id)
+        else:
+            return
         #Re-Populating the table wit all contacts from contacts table
         self.contact_display.delete(*self.contact_display.get_children())
         contacts = database.display_all_contacts()
