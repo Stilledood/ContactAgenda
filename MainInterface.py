@@ -75,8 +75,8 @@ class Contacts(tk.Frame):
         self.add_button=tk.Button(self.master, text='Add Contact' ,font=('Helvetica', 8), bg='grey', fg='white',command=self.add_contact).place(rely=0.45,relx=0.4,anchor='ne')
         self.update_contact=tk.Button(self.master, text= 'Update Contact', font=('Helvetica', 8),bg= 'grey', fg= 'white',command=self.update_contact).place(rely=0.45, relx=0.52, anchor='ne')
         self.delete_contact = tk.Button(self.master, text='Delete Contact', font=('Helvetica', 8), bg='grey', fg='white', command=self.delete_contact).place(rely=0.45, relx=0.64,anchor='ne')
-        self.clear_data= tk.Button(self.master, text='Clear', font=('Helvetica', 8),bg='grey', fg='white', command=self.clear_form).place(rely=0.45, relx=0.70, anchor='ne')
-        
+        self.clear_data= tk.Button(self.master, text='Clear', font=('Helvetica', 8), bg='grey', fg='white', command=self.clear_form).place(rely=0.45, relx=0.70, anchor='ne')
+        self.show_all_contacts = tk.Button(self.master, text='Show All' , font=('Helvetica', 8), bg='grey', fg='white', command=self.display_selected_contacts).place(rely=0.45, relx=0.79, anchor='ne')
 
         #Adding a tree to display contacts from database
         columns = ('Id','First Name', 'Last Name', 'Email', 'Phone')
