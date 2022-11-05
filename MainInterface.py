@@ -4,14 +4,16 @@ import tkinter.messagebox as mb
 from tkcalendar import Calendar
 import datetime
 import database
+import customtkinter
 
-
+customtkinter.set_appearance_mode("System")
 
 class SampleApp(tk.Tk):
     '''Class to control all windows from entire app'''
 
     def __init__(self):
         tk.Tk.__init__(self)
+
         self.geometry("800x650+351+174")
 
         self._frame=None
@@ -33,10 +35,20 @@ class StartPage(tk.Frame):
     '''Class to construct main window using tkinter'''
 
     def __init__(self,master):
-        tk.Frame.__init__(self,master)
-        tk.Label(self, text='Personal Agenda').pack(side='top', fill ='x', pady =10)
-        tk.Button(self, text='Contacts',command= lambda : master.switch_frame(Contacts)).pack()
-        tk.Button(self, text='Event Planner',command = lambda : master.switch_frame(Planner)).pack()
+        tk.Frame.__init__(self,master,width=640, height=800)
+
+
+        customtkinter.CTkLabel(self, text='Personal Agenda & Planner').place(relx=0.5, rely=0.5, anchor=tk.CENTER)
+
+        self.contacts_button = customtkinter.CTkButton(self,width=129, height=32, border_width=0.5, corner_radius=10, text='Contacts', text_font=('Helvetica', 10), text_color='grey18',  command= lambda : self.master.switch_frame(Contacts) )
+
+        self.contacts_button.pack(padx=0.5, pady=30)
+        self.planner_button = customtkinter.CTkButton(self, width=129, height=32, border_width=0.5, corner_radius=10, text='Tasks', text_font=('Helvetica', 10),text_color='grey18', command=lambda: self.master.switch_frame(Planner))
+
+
+        self.planner_button.pack(padx=0.5, pady=50)
+        #tk.Button(self, text='Contacts',command= lambda : master.switch_frame(Contacts)).pack()
+        #tk.Button(self, text='Event Planner',command = lambda : master.switch_frame(Planner)).pack()
 
 
 
@@ -62,23 +74,24 @@ class Contacts(tk.Frame):
 
         #Adding entries for updating/adding contacts
 
-        self.entry_contact_first_name = tk.Entry(self.master)
+        self.entry_contact_first_name = customtkinter.CTkEntry(self.master)
         self.entry_contact_first_name.place(rely=0.2,relx=0.6,relheight=0.028,anchor='ne')
-        self.entry_contact_last_name = tk.Entry(self.master)
+        self.entry_contact_last_name = customtkinter.CTkEntry(self.master)
         self.entry_contact_last_name.place(rely=0.25, relx=0.6,relheight=0.028, anchor='ne')
-        self.entry_contact_email = tk.Entry(self.master)
+        self.entry_contact_email = customtkinter.CTkEntry(self.master)
         self.entry_contact_email.place(rely=0.3, relx=0.6, relheight=0.028, anchor='ne')
-        self.entry_contact_phone = tk.Entry(self.master)
+        self.entry_contact_phone = customtkinter.CTkEntry(self.master)
         self.entry_contact_phone.place(rely=0.35, relx=0.6, relheight=0.028, anchor='ne')
 
 
         #Adding buttons to add/updarte /delete a contact and to clear the form
 
-        self.add_button=tk.Button(self.master, text='Add Contact' ,font=('Helvetica', 8), bg='grey', fg='white',command=self.add_contact).place(rely=0.45,relx=0.4,anchor='ne')
-        self.update_contact=tk.Button(self.master, text= 'Update Contact', font=('Helvetica', 8),bg= 'grey', fg= 'white',command=self.update_contact).place(rely=0.45, relx=0.52, anchor='ne')
-        self.delete_contact = tk.Button(self.master, text='Delete Contact', font=('Helvetica', 8), bg='grey', fg='white', command=self.delete_contact).place(rely=0.45, relx=0.64,anchor='ne')
-        self.clear_data= tk.Button(self.master, text='Clear', font=('Helvetica', 8), bg='grey', fg='white', command=self.clear_form).place(rely=0.45, relx=0.70, anchor='ne')
-        self.show_all_contacts = tk.Button(self.master, text='Show All' , font=('Helvetica', 8), bg='grey', fg='white', command=self.display_selected_contacts).place(rely=0.45, relx=0.79, anchor='ne')
+        self.add_button=customtkinter.CTkButton(self.master, text='Add Contact' ,text_font=('Helvetica', 8),width=30, corner_radius=10,text_color='white', command=self.add_contact).place(rely=0.45,relx=0.3,anchor='ne')
+
+        self.update_contact=customtkinter.CTkButton(self.master, text= 'Update Contact', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white', command=self.update_contact).place(rely=0.45, relx=0.45, anchor='ne')
+        self.delete_contact = customtkinter.CTkButton(self.master, text='Delete Contact', text_font=('Helvetica', 8), width=30,corner_radius=10, text_color='white', command=self.delete_contact).place(rely=0.45, relx=0.595,anchor='ne')
+        self.clear_data= customtkinter.CTkButton(self.master, text='Clear', text_font=('Helvetica', 8), width=30,corner_radius=10,text_color='white', command=self.clear_form).place(rely=0.45, relx=0.68, anchor='ne')
+        self.show_all_contacts = customtkinter.CTkButton(self.master, text='Show All' , text_font=('Helvetica', 8), width=30 ,corner_radius=10, text_color='white',  command=self.display_selected_contacts).place(rely=0.45, relx=0.79, anchor='ne')
 
         #Adding a tree to display contacts from database
         columns = ('Id','First Name', 'Last Name', 'Email', 'Phone')
@@ -105,9 +118,9 @@ class Contacts(tk.Frame):
 
         #Adding A search bar and button-to search contacts by last name
 
-        self.search_button = tk.Button(self.master, text='Search By Last Name', font=('Helvetica', 8), bg='grey', fg='white' ,command=self.display_searched_contacts).place(rely=0.9,relx=0.45,anchor='ne')
-        self.search_bar= tk.Entry(self.master)
-        self.search_bar.place(rely=0.9 , relx=0.75, relheight=0.035, relwidth=0.25, anchor='ne')
+        self.search_button = customtkinter.CTkButton(self.master, text='Search By Last Name', text_font=('Helvetica', 8), width=39, corner_radius=10, text_color='white', command=self.display_searched_contacts).place(rely=0.9,relx=0.45,anchor='ne')
+        self.search_bar= customtkinter.CTkEntry(self.master)
+        self.search_bar.place(rely=0.9 , relx=0.77, relheight=0.045, relwidth=0.3, anchor='ne')
 
 
 
@@ -224,7 +237,7 @@ class Planner(tk.Frame):
         #Adding a Tree view to display tasks from events table
         columns=('Id', 'Task', 'Description', 'Date Added', 'Due Date')
         self.tasks_view = ttk.Treeview(self.master, show='headings',height=10, columns=columns)
-        self.tasks_view.place(rely=0.6, relx=0.85, anchor='ne', width=540)
+        self.tasks_view.place(rely=0.635, relx=0.85, anchor='ne', width=540)
         self.tasks_view.heading('Id', text= 'Id', anchor='center')
         self.tasks_view.column('Id', width=70, anchor='center')
         self.tasks_view.heading('Task', text='Task', anchor='center')
@@ -239,11 +252,29 @@ class Planner(tk.Frame):
 
         #Adding labels to display selected task
         self.label_task_name = tk.Label(self.master, text='Task', font=('Helvetica', 8))
-        self.label_task_name.place(relx=0.2, rely=0.42, anchor='ne')
+        self.label_task_name.place(relx=0.35, rely=0.42, anchor='ne')
         self.label_task_description = tk.Label(self.master, text='Description', font=('Helvetica', 8))
-        self.label_task_description.place(relx=0.2, rely=0.46, anchor='ne')
+        self.label_task_description.place(relx=0.35, rely=0.46, anchor='ne')
         self.label_task_due_date = tk.Label(self.master, text='Due Date', font=('Helvetica', 8))
-        self.label_task_due_date.place(relx=0.2, rely=0.5, anchor='ne')
+        self.label_task_due_date.place(relx=0.35, rely=0.5, anchor='ne')
+
+        # Adding Entries to display selected tasks from list
+        self.entry_task_title = tk.Entry(self.master)
+        self.entry_task_title.place(rely=0.42, relx=0.55, relheight=0.028, anchor='ne', width=150)
+        self.entry_tast_description = tk.Entry(self.master)
+        self.entry_tast_description.place(rely=0.46, relx=0.55, relheight=0.028, anchor='ne', width=150)
+        self.entry_task_due_date = tk.Entry(self.master)
+        self.entry_task_due_date.place(rely=0.50, relx=0.55, relheight=0.028, anchor='ne', width=150)
+
+        # Adding Buttons to add/update/delete a task
+        self.add_task_button = customtkinter.CTkButton(self.master, text='Add Task' )
+        self.add_task_button.place(rely=0.57, relx=0.35, anchor='ne')
+        self.update_task_button =tk.Button(self.master, text='Change Task', font=('Helvetica', 8), bg='grey', fg='white', width=15)
+        self.update_task_button.place(rely=0.57, relx=0.50, anchor='ne')
+        self.delete_task_button = tk.Button(self.master, text='Delete Task', font=('Helvetica', 8), bg='grey', fg='white', width=15)
+        self.delete_task_button.place(rely=0.57, relx=0.65, anchor='ne')
+
+
 
 
 
