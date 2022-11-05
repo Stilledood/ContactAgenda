@@ -5,8 +5,12 @@ from tkcalendar import Calendar
 import datetime
 import database
 import customtkinter
+import sv_ttk
+
 
 customtkinter.set_appearance_mode("System")
+
+
 
 class SampleApp(tk.Tk):
     '''Class to control all windows from entire app'''
@@ -94,8 +98,13 @@ class Contacts(tk.Frame):
         self.show_all_contacts = customtkinter.CTkButton(self.master, text='Show All' , text_font=('Helvetica', 8), width=30 ,corner_radius=10, text_color='white',  command=self.display_selected_contacts).place(rely=0.45, relx=0.79, anchor='ne')
 
         #Adding a tree to display contacts from database
+        style = ttk.Style()
+        style.configure("mystyle.Treeview", highlightthickness=0, bd=10,
+                        font=('Helvetica', 8), relief='flat', borderwidth=0.5)  # Modify the font of the body
+        style.configure("mystyle.Treeview.Heading", font=('Helvetica', 9, 'bold'), background='blue58')  # Modify the font of the headings
+
         columns = ('Id','First Name', 'Last Name', 'Email', 'Phone')
-        self.contact_display = ttk.Treeview(self.master, show='headings',height=10, columns=columns)
+        self.contact_display = ttk.Treeview(self.master, show='headings',height=10, columns=columns, style='mystyle.Treeview')
         self.contact_display.place(rely=0.7,relx=0.5,width=540,anchor='center')
         self.contact_display.heading('Id', text= 'Id', anchor='center')
         self.contact_display.column('Id', width=70, anchor='center')
@@ -110,10 +119,11 @@ class Contacts(tk.Frame):
         self.contact_display.bind(self.display_selected_contacts())
         self.contact_display.bind("<<TreeviewSelect>>",self.show_selected_contact)
 
+
         #Adding scrollbar
-        self.scrool_bar = ttk.Scrollbar(self.master, orient=tk.VERTICAL, command= self.contact_display.yview)
-        self.scrool_bar.place(x=660, y= 400 ,width=20)
-        self.contact_display.configure(xscrollcommand=self.scrool_bar.set)
+        self.scrool_bar = customtkinter.CTkScrollbar(self.master,border_spacing=3,height=225, width=10, scrollbar_hover_color='blue', command= self.contact_display.yview)
+        self.scrool_bar.place(x=662, y= 342 ,width=15)
+        self.contact_display.configure(yscrollcommand=self.scrool_bar.set)
 
 
         #Adding A search bar and button-to search contacts by last name
@@ -220,18 +230,18 @@ class Planner(tk.Frame):
         tasks = database.fetch_all_events()
         self.name = tk.Label(text='Tasks' ,font=('Helvetica' ,12)).pack(side='top',padx=0, fill='x' )
         today = datetime.date.today()
-        self.calendar=Calendar(self.master, selectmode='day', year=today.year, month=today.month, day=today.day, font=('Helvetica', 10), headersbackground ='light grey', headersforeground='black')
+        self.calendar=Calendar(self.master, selectmode='day', year=today.year, month=today.month, day=today.day, font=('Helvetica', 10), headersbackground ='#3090C7', headersforeground='white',bordercolor='white', weekendbackground='light blue',background='#1589FF',borderwidthint=0, width=100 )
         self.calendar.place(rely=0.1, relx=0.58, anchor='ne')
         # Adding buttons to display selected tasks based on day,month,year
-        self.daily_task_button = tk.Button(self.master, text='Today Tasks', font=('Helvetica', 8), bg='grey', fg='white', width=15)
+        self.daily_task_button = customtkinter.CTkButton(self.master, text= 'Daily Tasks', text_font=('Helvetica', 8),width=40,corner_radius=10, text_color='white')
         self.daily_task_button.place(rely=0.1, relx=0.8, anchor='ne')
-        self.weekly_task_button = tk.Button(self.master, text='Weekly Tasks', font=('Helvetica', 8), bg='grey', fg='white', width=15)
+        self.weekly_task_button = customtkinter.CTkButton(self.master, text= 'Weekly Tasks', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
         self.weekly_task_button.place(rely=0.165, relx=0.8, anchor='ne')
-        self.monthly_task_button = tk.Button(self.master, text='Monthly Tasks', font=('Helvetica', 8), bg='grey', fg='white', width=15)
+        self.monthly_task_button = customtkinter.CTkButton(self.master, text= 'Monthly Tasks', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
         self.monthly_task_button.place(rely=0.23, relx=0.8, anchor='ne')
-        self.day_search_button = tk.Button(self.master, text='Day Search', font=('Helvetica', 8), bg='grey', fg='white', width=15)
+        self.day_search_button = customtkinter.CTkButton(self.master, text= 'Day Search', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
         self.day_search_button.place(rely=0.295, relx=0.8, anchor='ne' )
-        self.month_search_button = tk.Button(self.master, text='Month Search', font=('Helvetica', 8), bg='grey', fg='white', width=15)
+        self.month_search_button = customtkinter.CTkButton(self.master, text= 'Month Search', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
         self.month_search_button.place(rely=0.36, relx=0.8, anchor='ne')
 
         #Adding a Tree view to display tasks from events table
@@ -259,20 +269,20 @@ class Planner(tk.Frame):
         self.label_task_due_date.place(relx=0.35, rely=0.5, anchor='ne')
 
         # Adding Entries to display selected tasks from list
-        self.entry_task_title = tk.Entry(self.master)
+        self.entry_task_title = customtkinter.CTkEntry(self.master)
         self.entry_task_title.place(rely=0.42, relx=0.55, relheight=0.028, anchor='ne', width=150)
-        self.entry_tast_description = tk.Entry(self.master)
+        self.entry_tast_description = customtkinter.CTkEntry(self.master)
         self.entry_tast_description.place(rely=0.46, relx=0.55, relheight=0.028, anchor='ne', width=150)
-        self.entry_task_due_date = tk.Entry(self.master)
+        self.entry_task_due_date = customtkinter.CTkEntry(self.master)
         self.entry_task_due_date.place(rely=0.50, relx=0.55, relheight=0.028, anchor='ne', width=150)
 
         # Adding Buttons to add/update/delete a task
-        self.add_task_button = customtkinter.CTkButton(self.master, text='Add Task' )
-        self.add_task_button.place(rely=0.57, relx=0.35, anchor='ne')
-        self.update_task_button =tk.Button(self.master, text='Change Task', font=('Helvetica', 8), bg='grey', fg='white', width=15)
-        self.update_task_button.place(rely=0.57, relx=0.50, anchor='ne')
-        self.delete_task_button = tk.Button(self.master, text='Delete Task', font=('Helvetica', 8), bg='grey', fg='white', width=15)
-        self.delete_task_button.place(rely=0.57, relx=0.65, anchor='ne')
+        self.add_task_button = customtkinter.CTkButton(self.master, text= 'Add Task', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
+        self.add_task_button.place(rely=0.57, relx=0.4, anchor='ne')
+        self.update_task_button =customtkinter.CTkButton(self.master, text= 'Change Task', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
+        self.update_task_button.place(rely=0.57, relx=0.56, anchor='ne')
+        self.delete_task_button = customtkinter.CTkButton(self.master, text= 'Delete Task', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
+        self.delete_task_button.place(rely=0.57, relx=0.7, anchor='ne')
 
 
 
@@ -345,4 +355,5 @@ class Planner(tk.Frame):
 
 
 app=SampleApp()
+sv_ttk.set_theme('light')
 app.mainloop()
