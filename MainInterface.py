@@ -8,6 +8,7 @@ import customtkinter
 import sv_ttk
 
 
+
 customtkinter.set_appearance_mode("System")
 
 
@@ -17,8 +18,7 @@ class SampleApp(tk.Tk):
 
     def __init__(self):
         tk.Tk.__init__(self)
-
-        self.geometry("800x650+351+174")
+        self.geometry("800x650")
 
         self._frame=None
         self.switch_frame(StartPage)
@@ -39,7 +39,12 @@ class StartPage(tk.Frame):
     '''Class to construct main window using tkinter'''
 
     def __init__(self,master):
-        tk.Frame.__init__(self,master,width=640, height=800)
+        tk.Frame.__init__(self,master)
+        self.master=master
+        self.configure(bg='white')
+
+
+
 
 
         customtkinter.CTkLabel(self, text='Personal Agenda & Planner').place(relx=0.5, rely=0.5, anchor=tk.CENTER)
@@ -48,11 +53,9 @@ class StartPage(tk.Frame):
 
         self.contacts_button.pack(padx=0.5, pady=30)
         self.planner_button = customtkinter.CTkButton(self, width=129, height=32, border_width=0.5, corner_radius=10, text='Tasks', text_font=('Helvetica', 10),text_color='grey18', command=lambda: self.master.switch_frame(Planner))
-
-
         self.planner_button.pack(padx=0.5, pady=50)
-        #tk.Button(self, text='Contacts',command= lambda : master.switch_frame(Contacts)).pack()
-        #tk.Button(self, text='Event Planner',command = lambda : master.switch_frame(Planner)).pack()
+
+
 
 
 
@@ -230,19 +233,19 @@ class Planner(tk.Frame):
         tasks = database.fetch_all_events()
         self.name = tk.Label(text='Tasks' ,font=('Helvetica' ,12)).pack(side='top',padx=0, fill='x' )
         today = datetime.date.today()
-        self.calendar=Calendar(self.master, selectmode='day', year=today.year, month=today.month, day=today.day, font=('Helvetica', 10), headersbackground ='#3090C7', headersforeground='white',bordercolor='white', weekendbackground='light blue',background='#1589FF',borderwidthint=0, width=100 )
-        self.calendar.place(rely=0.1, relx=0.58, anchor='ne')
+        self.calendar=Calendar(self.master, selectmode='day', year=today.year, month=today.month, day=today.day, font=('Helvetica', 10), headersbackground ='#3090C7', headersforeground='white',bordercolor='white', weekendbackground='light blue',background='#1589FF',borderwidthint=0, cursor='hand1' )
+        self.calendar.place(rely=0.1, relx=0.68, anchor='ne',relwidth=0.6, relheight=0.3)
         # Adding buttons to display selected tasks based on day,month,year
-        self.daily_task_button = customtkinter.CTkButton(self.master, text= 'Daily Tasks', text_font=('Helvetica', 8),width=40,corner_radius=10, text_color='white')
-        self.daily_task_button.place(rely=0.1, relx=0.8, anchor='ne')
+        self.daily_task_button = customtkinter.CTkButton(self.master, text= 'Daily Tasks', text_font=('Helvetica', 8),width=50,corner_radius=10, text_color='white')
+        self.daily_task_button.place(rely=0.1, relx=0.915, anchor='ne', relwidth=0.15)
         self.weekly_task_button = customtkinter.CTkButton(self.master, text= 'Weekly Tasks', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
-        self.weekly_task_button.place(rely=0.165, relx=0.8, anchor='ne')
+        self.weekly_task_button.place(rely=0.165, relx=0.915, anchor='ne', relwidth=0.15)
         self.monthly_task_button = customtkinter.CTkButton(self.master, text= 'Monthly Tasks', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
-        self.monthly_task_button.place(rely=0.23, relx=0.8, anchor='ne')
+        self.monthly_task_button.place(rely=0.23, relx=0.915, anchor='ne', relwidth=0.15)
         self.day_search_button = customtkinter.CTkButton(self.master, text= 'Day Search', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
-        self.day_search_button.place(rely=0.295, relx=0.8, anchor='ne' )
+        self.day_search_button.place(rely=0.295, relx=0.915, anchor='ne', relwidth=0.15 )
         self.month_search_button = customtkinter.CTkButton(self.master, text= 'Month Search', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
-        self.month_search_button.place(rely=0.36, relx=0.8, anchor='ne')
+        self.month_search_button.place(rely=0.36, relx=0.915, anchor='ne', relwidth=0.15)
 
         #Adding a Tree view to display tasks from events table
         columns=('Id', 'Task', 'Description', 'Date Added', 'Due Date')
@@ -259,30 +262,57 @@ class Planner(tk.Frame):
         self.tasks_view.heading('Due Date', text='Due Date', anchor='center')
         self.tasks_view.column('Due Date', width=70, anchor='center')
         self.tasks_view.bind(self.display_all_tasks())
+        self.tasks_view.bind("<<TreeviewSelect>>", self.show_selected_tasks)
 
         #Adding labels to display selected task
         self.label_task_name = tk.Label(self.master, text='Task', font=('Helvetica', 8))
-        self.label_task_name.place(relx=0.35, rely=0.42, anchor='ne')
+        self.label_task_name.place(relx=0.15, rely=0.42, anchor='ne')
         self.label_task_description = tk.Label(self.master, text='Description', font=('Helvetica', 8))
-        self.label_task_description.place(relx=0.35, rely=0.46, anchor='ne')
+        self.label_task_description.place(relx=0.15, rely=0.46, anchor='ne')
         self.label_task_due_date = tk.Label(self.master, text='Due Date', font=('Helvetica', 8))
-        self.label_task_due_date.place(relx=0.35, rely=0.5, anchor='ne')
+        self.label_task_due_date.place(relx=0.15, rely=0.5, anchor='ne')
 
         # Adding Entries to display selected tasks from list
         self.entry_task_title = customtkinter.CTkEntry(self.master)
-        self.entry_task_title.place(rely=0.42, relx=0.55, relheight=0.028, anchor='ne', width=150)
+        self.entry_task_title.place(rely=0.42, relx=0.375, relheight=0.028, anchor='ne', width=150)
         self.entry_tast_description = customtkinter.CTkEntry(self.master)
-        self.entry_tast_description.place(rely=0.46, relx=0.55, relheight=0.028, anchor='ne', width=150)
+        self.entry_tast_description.place(rely=0.46, relx=0.375, relheight=0.028, anchor='ne', width=150)
         self.entry_task_due_date = customtkinter.CTkEntry(self.master)
-        self.entry_task_due_date.place(rely=0.50, relx=0.55, relheight=0.028, anchor='ne', width=150)
+        self.entry_task_due_date.place(rely=0.50, relx=0.375, relheight=0.028, anchor='ne', width=150)
 
-        # Adding Buttons to add/update/delete a task
-        self.add_task_button = customtkinter.CTkButton(self.master, text= 'Add Task', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
-        self.add_task_button.place(rely=0.57, relx=0.4, anchor='ne')
+        # Adding Buttons to add/update/delete/clear form a task
+        self.add_task_button = customtkinter.CTkButton(self.master, text= 'Add Task', text_font=('Helvetica', 8),width=40,corner_radius=10, text_color='white')
+        self.add_task_button.place(rely=0.465, relx=0.55, anchor='ne',relwidth=0.10)
         self.update_task_button =customtkinter.CTkButton(self.master, text= 'Change Task', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
-        self.update_task_button.place(rely=0.57, relx=0.56, anchor='ne')
+        self.update_task_button.place(rely=0.465, relx=0.67, anchor='ne', relwidth=0.10)
         self.delete_task_button = customtkinter.CTkButton(self.master, text= 'Delete Task', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
-        self.delete_task_button.place(rely=0.57, relx=0.7, anchor='ne')
+        self.delete_task_button.place(rely=0.465, relx=0.79, anchor='ne',relwidth=0.10)
+        self.clear_form_button= customtkinter.CTkButton(self.master, text='Clear',text_font=('Helvetica', 8), width=30, corner_radius=10, text_color='white')
+        self.clear_form_button.place(rely=0.465, relx=0.91, anchor='ne', relwidth=0.10)
+
+        #Adding button to search for a specific tast based on title
+        self.search_task_button = customtkinter.CTkButton(self.master, text='Search Task By Title', text_font=('Helvetica', 8), width=30, corner_radius=10, text_color='white')
+        self.search_task_button.place(rely=0.9, relx=0.45, anchor='ne')
+        self.search_entry =customtkinter.CTkEntry(self.master)
+        self.search_entry.place(rely=0.9, relx=0.73, anchor='ne',relwidth=0.25)
+
+        #Adding separators
+        self.separator = customtkinter.CTkProgressBar(self.master, corner_radius=5, width=5,height=200,orient='vertical')
+        self.separator.set(100,100)
+        self.separator.place(rely=0.1, relx=0.725, anchor='ne')
+
+        self.second_separator = customtkinter.CTkProgressBar(self.master, corner_radius=5, width=5, height =80, orient='vertical')
+        self.second_separator.set(100,100)
+        self.second_separator.place(rely=0.42, relx=0.43, anchor='ne')
+
+        #Adding back button to return to previous window
+        self.back_button = customtkinter.CTkButton(self.master , text='Back', text_font=('Helvetica', 8), width=30, corner_radius=10, text_color='white', command=self.back_return)
+        self.back_button.place(relx=0.1, rely=0.01, anchor='ne')
+
+
+
+
+
 
 
 
@@ -296,6 +326,42 @@ class Planner(tk.Frame):
             for task in tasks:
                 print(task[3].date())
                 self.tasks_view.insert('', 'end', values=(task[0], task[1], task[2], task[3].date(), task[4].date()))
+
+
+    def clear_form(self):
+        '''Method to clear all form fileds'''
+
+        self.entry_task_title.delete(0, tk.END)
+        self.entry_tast_description.delete(0, tk.END)
+        self.entry_task_due_date.delete(0, tk.END)
+
+
+
+    def show_selected_tasks(self,event):
+        '''Method to display in form selected task from the table'''
+
+        self.clear_form()
+        for selection in self.tasks_view.selection():
+            item= self.tasks_view.item(selection)
+            global task_id_num
+            task_id_num, task, description,_, due_date = item['values'][:5]
+            self.entry_task_title.insert(0, task)
+            self.entry_tast_description.insert(0, description)
+            self.entry_task_due_date.insert(0, due_date)
+
+    def back_return(self):
+        self.master.destroy()
+        app=SampleApp()
+        app.mainloop()
+
+
+
+
+
+
+
+
+
 
 
 
