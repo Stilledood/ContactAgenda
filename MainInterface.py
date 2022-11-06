@@ -6,6 +6,7 @@ import datetime
 import database
 import customtkinter
 import sv_ttk
+from customtkinter import CTk
 
 
 
@@ -19,18 +20,22 @@ class SampleApp(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
         self.geometry("800x650")
-
         self._frame=None
         self.switch_frame(StartPage)
+        print(self._frame)
 
 
     def switch_frame(self,frame_class):
         '''Destroy curent frame and replace the old one with new one'''
+
         new_frame=frame_class(self)
         if self._frame is not None:
             self._frame.destroy()
         self._frame=new_frame
         self._frame.pack()
+
+
+
 
 
 
@@ -72,7 +77,7 @@ class Contacts(tk.Frame):
         database.create_check_database()
         self.contacts=database.display_all_contacts()
 
-        tk.Label(self,text='Contacts').pack(side='top', fill='x',pady= 0)
+
         # Adding labels for conatct updating/adding form
         self.label_contact_first_name = tk.Label(self.master,text='First Name', font=('Helvetica',8)).place(rely=0.2,relx=0.4,anchor='ne')
         self.label_contact_last_name = tk.Label(self.master,text='Last Name', font =('Helvetica', 8)).place(rely=0.25, relx=0.4, anchor='ne')
@@ -134,6 +139,14 @@ class Contacts(tk.Frame):
         self.search_button = customtkinter.CTkButton(self.master, text='Search By Last Name', text_font=('Helvetica', 8), width=39, corner_radius=10, text_color='white', command=self.display_searched_contacts).place(rely=0.9,relx=0.45,anchor='ne')
         self.search_bar= customtkinter.CTkEntry(self.master)
         self.search_bar.place(rely=0.9 , relx=0.77, relheight=0.045, relwidth=0.3, anchor='ne')
+
+        #Adding Tab view to change between contacts window and tasks window
+        self.contacts_button = customtkinter.CTkButton(self.master, text='Contacts', text_color='white', text_font=('Helvetica', 8), corner_radius=10, width=30, state='disabled')
+        self.contacts_button.place(relx=0.5, rely=0.05, anchor='ne', relwidth=0.15)
+        self.task_button = customtkinter.CTkButton(self.master, text='Tasks', text_font=('Helvetica', 8), text_color='white', corner_radius=10, width=30, command= self.switch_to_tasks)
+        self.task_button.place(relx=0.51, rely=0.05, relwidth=0.15)
+
+
 
 
 
@@ -221,6 +234,13 @@ class Contacts(tk.Frame):
         for contact in contacts :
             self.contact_display.insert('', 'end', values=(contact[0], contact[1], contact[2], contact[3], contact[4]))
 
+    def switch_to_tasks(self):
+        self.master.destroy()
+        app=SampleApp()
+        app.switch_frame(Planner)
+        app.mainloop()
+
+
 
 
 
@@ -231,7 +251,7 @@ class Planner(tk.Frame):
         tk.Frame.__init__(self,master)
         self.master=master
         tasks = database.fetch_all_events()
-        self.name = tk.Label(text='Tasks' ,font=('Helvetica' ,12)).pack(side='top',padx=0, fill='x' )
+
         today = datetime.date.today()
         self.calendar=Calendar(self.master, selectmode='day', year=today.year, month=today.month, day=today.day, font=('Helvetica', 10), headersbackground ='#3090C7', headersforeground='white',bordercolor='white', weekendbackground='light blue',background='#1589FF',borderwidthint=0, cursor='hand1' )
         self.calendar.place(rely=0.1, relx=0.68, anchor='ne',relwidth=0.6, relheight=0.3)
@@ -305,9 +325,15 @@ class Planner(tk.Frame):
         self.second_separator.set(100,100)
         self.second_separator.place(rely=0.42, relx=0.43, anchor='ne')
 
-        #Adding back button to return to previous window
-        self.back_button = customtkinter.CTkButton(self.master , text='Back', text_font=('Helvetica', 8), width=30, corner_radius=10, text_color='white', command=self.back_return)
-        self.back_button.place(relx=0.1, rely=0.01, anchor='ne')
+        # Adding Tab view to change between contacts window and tasks window
+        self.contacts_button = customtkinter.CTkButton(self.master, text='Contacts', text_color='white',
+                                                       text_font=('Helvetica', 8), corner_radius=10, width=30,command=self.switch_to_contacts )
+        self.contacts_button.place(relx=0.5, rely=0.02, anchor='ne', relwidth=0.15)
+        self.task_button = customtkinter.CTkButton(self.master, text='Tasks', text_font=('Helvetica', 8),
+                                                   text_color='white', corner_radius=10, width=30,state='disabled')
+        self.task_button.place(relx=0.51, rely=0.02, relwidth=0.15)
+
+
 
 
 
@@ -349,9 +375,10 @@ class Planner(tk.Frame):
             self.entry_tast_description.insert(0, description)
             self.entry_task_due_date.insert(0, due_date)
 
-    def back_return(self):
+    def switch_to_contacts(self):
         self.master.destroy()
         app=SampleApp()
+        app.switch_frame(Contacts)
         app.mainloop()
 
 
