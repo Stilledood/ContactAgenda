@@ -166,4 +166,3 @@ def add_event(title, description, finalizing_date):
 
 
 
-update_contact(1,'florin', 'corciova', 'f@gmail.com', '12345678')
