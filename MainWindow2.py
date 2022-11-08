@@ -216,7 +216,7 @@ class Tasks(customtkinter.CTkFrame):
         columns = ('Id', 'Title','Short Description','Due Date')
 
         self.task_view = ttk.Treeview(self,show='headings', columns=columns, height=7)
-        self.task_view.place(relx=0.95, rely=0.5, anchor='ne', relwidth=0.9)
+        self.task_view.place(relx=0.95, rely=0.55, anchor='ne', relwidth=0.9)
         self.task_view.heading('Id',text='Id', anchor='center')
         self.task_view.column('Id', width=30 ,anchor='center', stretch='False')
         self.task_view.heading('Title', text='Title', anchor='center')
@@ -230,21 +230,42 @@ class Tasks(customtkinter.CTkFrame):
 
         #Adding text area to display selected task details
 
-        self.task_text_area = customtkinter.CTkTextbox(self,width=250, height=125, corner_radius=10,text_color='gray39')
-        self.task_text_area.place(relx=0.85, rely=0.8, anchor='ne')
-        self.task_title_entry = customtkinter.CTkEntry(self, self, placeholder_text='Task Title', width=200, height=35, corner_radius=10)
-        self.task_title_entry.place(relx=0.775, rely=0.75, anchor='ne')
+        self.task_text_area = customtkinter.CTkTextbox(self,width=250, height=100, corner_radius=10,text_color='gray39')
+        self.task_text_area.place(relx=0.85, rely=0.84, anchor='ne')
+        self.task_title_entry = customtkinter.CTkEntry(self, placeholder_text='Task Title', width=200, height=35, corner_radius=10)
+        self.task_title_entry.place(relx=0.775, rely=0.785, anchor='ne')
 
         #Adding calendar widget
 
         self.calendar = Calendar(self)
-        self.calendar.place(relx=0.65, rely=0.1, anchor='ne',relwidth=0.6)
+        self.calendar.place(relx=0.65, rely=0.03, anchor='ne',relwidth=0.6)
 
         #Adding Meniu button to select tasks(day , week , month)
         self.task_menu = customtkinter.CTkComboBox(self, values=['Day','Week','Month'])
-        self.task_menu.place(relx=0.95, rely=0.02 ,anchor='ne')
+        self.task_menu.place(relx=0.975, rely=0.03 ,anchor='ne',relwidth=0.3)
 
-        #Adding 
+        #Adding entries to add/update/delete tasks
+        self.task_name_entry = customtkinter.CTkEntry(self, placeholder_text='Title', width=150, height=30, corner_radius=10 )
+        self.task_name_entry.place(relx=0.46, rely=0.3, anchor='ne')
+        self.task_description_entry = customtkinter.CTkEntry(self,placeholder_text='Description', corner_radius=10, width=150, height=30)
+        self.task_description_entry.place(relx=0.46, rely=0.35, anchor='ne')
+        self.task_due_date_entry = customtkinter.CTkEntry(self,placeholder_text='Due Date', corner_radius=10, width=150, height=30)
+        self.task_due_date_entry.place(relx=0.46, rely=0.4, anchor='ne')
+
+        #Adding buttons to add/delete/update a task
+        self.add_task_button = customtkinter.CTkButton(self, text='Add Tasks', corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4')
+        self.add_task_button.place(relx=0.9, rely=0.3, anchor='ne',relwidth=0.3)
+        self.update_task_button = customtkinter.CTkButton(self,text='Update Tasks', corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4')
+        self.update_task_button.place(relx=0.9, rely=0.35, anchor='ne', relwidth=0.3)
+        self.delete_task_button = customtkinter.CTkButton(self, text='Delete Tasks', corner_radius=10,
+                                                          border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4')
+        self.delete_task_button.place(relx=0.9, rely=0.4, anchor='ne', relwidth=0.3)
+
+        #Add button to clear form fields and another one to reset the table view
+        self.clear_form_button= customtkinter.CTkButton(self, text='Clear Form', corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4')
+        self.clear_form_button.place(relx=0.35, rely=0.5, anchor='ne' ,relwidth=0.3)
+        self.show_all_button =customtkinter.CTkButton(self, text='Show All Tasks' , corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4')
+        self.show_all_button.place(relx = 0.9, rely=0.5, anchor='ne', relwidth=0.3)
 
 
 
@@ -264,6 +285,9 @@ class Tasks(customtkinter.CTkFrame):
             task_id, task_title, task_description, task_due_date = item['values'][:5]
             self.task_text_area.insert("10.0", task_description)
             self.task_title_entry.configure(placeholder_text=task_title)
+            self.task_name_entry.configure(placeholder_text=task_title)
+            self.task_description_entry.configure(placeholder_text=task_description)
+            self.task_due_date_entry.configure(placeholder_text=task_due_date)
 
 
 

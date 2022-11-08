@@ -10,7 +10,7 @@ from customtkinter import CTk
 
 
 
-customtkinter.set_appearance_mode("System")
+
 
 
 
@@ -301,7 +301,7 @@ class Planner(tk.Frame):
         self.entry_task_due_date.place(rely=0.50, relx=0.375, relheight=0.028, anchor='ne', width=150)
 
         # Adding Buttons to add/update/delete/clear form a task
-        self.add_task_button = customtkinter.CTkButton(self.master, text= 'Add Task', text_font=('Helvetica', 8),width=40,corner_radius=10, text_color='white')
+        self.add_task_button = customtkinter.CTkButton(self.master, text= 'Add Task', text_font=('Helvetica', 8),width=40,corner_radius=10, text_color='white', command=self.add_task)
         self.add_task_button.place(rely=0.465, relx=0.55, anchor='ne',relwidth=0.10)
         self.update_task_button =customtkinter.CTkButton(self.master, text= 'Change Task', text_font=('Helvetica', 8),width=30,corner_radius=10, text_color='white')
         self.update_task_button.place(rely=0.465, relx=0.67, anchor='ne', relwidth=0.10)
@@ -332,6 +332,9 @@ class Planner(tk.Frame):
         self.task_button = customtkinter.CTkButton(self.master, text='Tasks', text_font=('Helvetica', 8),
                                                    text_color='white', corner_radius=10, width=30,state='disabled')
         self.task_button.place(relx=0.51, rely=0.02, relwidth=0.15)
+
+        self.change_button =customtkinter.CTkSwitch(self.master, text='contacts')
+        self.change_button.place(rely=0.5, relx=0.5, anchor='ne')
 
 
 
@@ -380,6 +383,17 @@ class Planner(tk.Frame):
         app=SampleApp()
         app.switch_frame(Contacts)
         app.mainloop()
+
+    def add_task(self):
+        task_name =self.entry_task_title.get()
+        task_description =self.entry_tast_description.get()
+        task_due_date = self.entry_task_due_date.get()
+        database.add_event(task_name,task_description,task_due_date)
+        self.clear_form()
+        self.tasks_view.delete(*self.tasks_view.get_children())
+        tasks=database.fetch_all_events()
+        for task in tasks:
+            self.tasks_view.insert('','end', values=(task[0], task[1], task[2], task[3].date(), task[4].date()))
 
 
 

@@ -104,10 +104,11 @@ def search_contact(last_name):
 def update_contact(id, first_name, last_name, email, phone):
     '''Function to update a contact from contacts table'''
 
+
     mydb = mysql.connector.connect(host='localhost', user=username, password=password, database='personalagenda')
     my_cursor = mydb.cursor()
     mysql_query = 'UPDATE contacts SET first_name = %s , last_name = %s , email = %s, phone = %s WHERE id = %s'
-    vals=(first_name, last_name, email, phone ,id)
+    vals = (first_name, last_name, email, phone, id)
     my_cursor.execute(mysql_query, vals)
     mydb.commit()
     my_cursor.close()
