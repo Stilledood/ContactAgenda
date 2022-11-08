@@ -5,6 +5,7 @@ from PIL import Image, ImageTk
 from tkinter import ttk
 import database
 from tkinter import messagebox as mb
+from tkcalendar import Calendar
 
 customtkinter.set_appearance_mode('dark')
 customtkinter.set_default_color_theme("green")
@@ -204,6 +205,72 @@ class Tasks(customtkinter.CTkFrame):
     def __init__(self, *args, **kwargs):
         super().__init__( *args, **kwargs)
 
+        style = ttk.Style()
+        style.theme_use('clam')
+        style.configure("Treeview", highlightthickness=1, bd=1,
+                        font=('Helvetica', 8), borderwidth=0, background='gray19', foreground='#B1B1B1',
+                        fieldbackground='gray19')  # Modify the font of the body
+        style.configure("Treeview.Heading", font=('Helvetica', 9, 'bold'),
+                        background='gray29')  # Modify the font of the headings
+        style.map('Treeview', background=[('selected', 'green')])
+        columns = ('Id', 'Title','Short Description','Due Date')
+
+        self.task_view = ttk.Treeview(self,show='headings', columns=columns, height=7)
+        self.task_view.place(relx=0.95, rely=0.5, anchor='ne', relwidth=0.9)
+        self.task_view.heading('Id',text='Id', anchor='center')
+        self.task_view.column('Id', width=30 ,anchor='center', stretch='False')
+        self.task_view.heading('Title', text='Title', anchor='center')
+        self.task_view.column('Title', width=90, anchor='center', stretch='False')
+        self.task_view.heading('Short Description', text='Description',anchor='center')
+        self.task_view.column('Short Description',width=90,anchor='ne')
+        self.task_view.heading('Due Date', text='Due Date', anchor='center')
+        self.task_view.column('Due Date', width=90, anchor='ne')
+        self.task_view.bind(self.display_all_tasks())
+        self.task_view.bind("<<TreeviewSelect>>", self.display_selected_task)
+
+        #Adding text area to display selected task details
+
+        self.task_text_area = customtkinter.CTkTextbox(self,width=250, height=125, corner_radius=10,text_color='gray39')
+        self.task_text_area.place(relx=0.85, rely=0.8, anchor='ne')
+        self.task_title_entry = customtkinter.CTkEntry(self, self, placeholder_text='Task Title', width=200, height=35, corner_radius=10)
+        self.task_title_entry.place(relx=0.775, rely=0.75, anchor='ne')
+
+        #Adding calendar widget
+
+        self.calendar = Calendar(self)
+        self.calendar.place(relx=0.65, rely=0.1, anchor='ne',relwidth=0.6)
+
+        #Adding Meniu button to select tasks(day , week , month)
+        self.task_menu = customtkinter.CTkComboBox(self, values=['Day','Week','Month'])
+        self.task_menu.place(relx=0.95, rely=0.02 ,anchor='ne')
+
+        #Adding 
+
+
+
+
+
+    def display_all_tasks(self):
+        tasks = database.fetch_all_events()
+        for task in tasks:
+            self.task_view.insert('', 'end', values=(task[0], task[1], task[2],task[4].date()))
+
+
+    def display_selected_task(self,event):
+        for selection in self.task_view.selection():
+            item = self.task_view.item(selection)
+
+            global task_id
+            task_id, task_title, task_description, task_due_date = item['values'][:5]
+            self.task_text_area.insert("10.0", task_description)
+            self.task_title_entry.configure(placeholder_text=task_title)
+
+
+
+
+
+
+
 
 class MainApp(customtkinter.CTk):
     '''Class to create main window'''
@@ -220,6 +287,7 @@ class MainApp(customtkinter.CTk):
         self.tasks= Tasks(self)
         self.tasks.grid(row=1,columns=2,padx=300,pady=50)
         self.tasks.place(relx=0.98, rely=0.02, anchor='ne', relwidth=0.3, relheight=0.95)
+
 
 
 
