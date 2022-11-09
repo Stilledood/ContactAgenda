@@ -259,7 +259,7 @@ class Tasks(customtkinter.CTkFrame):
         self.update_task_button = customtkinter.CTkButton(self,text='Update Tasks', corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4', command=self.update_task)
         self.update_task_button.place(relx=0.9, rely=0.35, anchor='ne', relwidth=0.3)
         self.delete_task_button = customtkinter.CTkButton(self, text='Delete Tasks', corner_radius=10,
-                                                          border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4')
+                                                          border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4', command=self.delete_task)
         self.delete_task_button.place(relx=0.9, rely=0.4, anchor='ne', relwidth=0.3)
 
         #Add button to clear form fields and another one to reset the table view
@@ -307,6 +307,7 @@ class Tasks(customtkinter.CTkFrame):
         database.add_event(task_title,task_description,task_due_date)
         mb.showinfo('Add Task','Task succesfully added')
         self.clear_form()
+        self.task_view.delete(*self.task_view.get_children())
         self.display_all_tasks()
 
     def update_task(self):
@@ -329,7 +330,27 @@ class Tasks(customtkinter.CTkFrame):
 
         database.update_event(id_task, task_title, task_description, task_due_date)
         self.clear_form()
+        self.task_view.delete(*self.task_view.get_children())
         self.display_all_tasks()
+
+    def delete_task(self):
+
+        id_task= task_id
+        task_title = self.task_name_entry.get()
+
+        if not task_title:
+            task_title = self.task_name_entry.placeholder_text
+
+        confirm_box = mb.askquestion('Delete Task', f"Are you sure you want to delete {task_title} ?")
+        if confirm_box == 'yes':
+            database.delete_event(id_task)
+            mb.showinfo('Delete Task', 'Task succesfully deleted')
+            self.clear_form()
+            self.task_view.delete(*self.task_view.get_children())
+            self.display_all_tasks()
+        else:
+            return
+
 
 
 
