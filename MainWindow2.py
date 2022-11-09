@@ -253,7 +253,7 @@ class Tasks(customtkinter.CTkFrame):
         self.task_due_date_entry.place(relx=0.46, rely=0.4, anchor='ne')
 
         #Adding buttons to add/delete/update a task
-        self.add_task_button = customtkinter.CTkButton(self, text='Add Tasks', corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4')
+        self.add_task_button = customtkinter.CTkButton(self, text='Add Tasks', corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4', command=self.add_task)
         self.add_task_button.place(relx=0.9, rely=0.3, anchor='ne',relwidth=0.3)
         self.update_task_button = customtkinter.CTkButton(self,text='Update Tasks', corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4')
         self.update_task_button.place(relx=0.9, rely=0.35, anchor='ne', relwidth=0.3)
@@ -269,6 +269,14 @@ class Tasks(customtkinter.CTkFrame):
 
 
 
+    def clear_form(self):
+
+        self.task_name_entry.delete(0,100)
+        self.task_name_entry.configure(placeholder_text='Title')
+        self.task_description_entry.delete(0,100)
+        self.task_description_entry.configure(placeholder_text='Description')
+        self.task_due_date_entry.delete(0,100)
+        self.task_due_date_entry.configure(placeholder_text='Due Date')
 
 
     def display_all_tasks(self):
@@ -288,6 +296,18 @@ class Tasks(customtkinter.CTkFrame):
             self.task_name_entry.configure(placeholder_text=task_title)
             self.task_description_entry.configure(placeholder_text=task_description)
             self.task_due_date_entry.configure(placeholder_text=task_due_date)
+
+    def add_task(self):
+
+        task_title = self.task_name_entry.get()
+        task_description = self.task_description_entry.get()
+        task_due_date = self.task_due_date_entry.get()
+
+        database.add_event(task_title,task_description,task_due_date)
+        mb.showinfo('Add Task','Task succesfully added')
+        self.clear_form()
+        self.display_all_tasks()
+
 
 
 
