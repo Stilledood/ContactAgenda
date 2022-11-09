@@ -7,6 +7,9 @@ import database
 from tkinter import messagebox as mb
 from tkcalendar import Calendar
 from dateutil import parser
+import datetime
+
+
 
 customtkinter.set_appearance_mode('dark')
 customtkinter.set_default_color_theme("green")
@@ -242,11 +245,11 @@ class Tasks(customtkinter.CTkFrame):
         self.calendar.place(relx=0.65, rely=0.03, anchor='ne',relwidth=0.6)
 
         #Adding Meniu button to select tasks(day , week , month)
-        self.today_tasks_button = customtkinter.CTkButton(self, text="Today's Tasks", corner_radius=10, border_color='white', bg_color='gray19', fg_color='gray29', text_font=('Futura', 9),border_width=2, command=self.display_day_tasks)
+        self.today_tasks_button = customtkinter.CTkButton(self, text="Today's Tasks", corner_radius=10, border_color='white', bg_color='gray19', fg_color='gray29', text_font=('Futura', 9),border_width=2, command=self.today_tasks)
         self.today_tasks_button.place(relx=0.975, rely=0.03, anchor='ne',relwidth=0.275, relheight=0.035)
         self.week_task_button = customtkinter.CTkButton(self, text ='Weekly Tasks', corner_radius=10, border_color='white', bg_color='gray19', fg_color='gray29', text_font=('Futura', 9), border_width=2)
         self.week_task_button.place(relx=0.975, rely=0.08, anchor='ne',relwidth=0.275, relheight=0.035)
-        self.day_search_tasks_button = customtkinter.CTkButton(self,text='Day Search',corner_radius=10, border_color='white', bg_color='gray19', fg_color='gray29', text_font=('Futura', 9),border_width=2)
+        self.day_search_tasks_button = customtkinter.CTkButton(self,text='Day Search',corner_radius=10, border_color='white', bg_color='gray19', fg_color='gray29', text_font=('Futura', 9),border_width=2, command=self.display_day_tasks)
         self.day_search_tasks_button.place(relx=0.975, rely=0.13, anchor='ne', relwidth=0.275,relheight=0.035)
         self.week_search_task_button =customtkinter.CTkButton(self, text='Week Search', corner_radius=10, border_color='white', bg_color='gray19', fg_color='gray29', text_font=('Futura', 9),border_width=2)
         self.week_search_task_button.place(relx=0.975, rely=0.18, anchor='ne', relwidth=0.275, relheight=0.035)
@@ -386,6 +389,14 @@ class Tasks(customtkinter.CTkFrame):
         self.task_view.delete(*self.task_view.get_children())
         for task in tasks:
             self.task_view.insert('','end', values=(task[0], task[1], task[2],task[4].date()))
+
+    def today_tasks(self):
+        today_date = datetime.date.today()
+        final_date = today_date.strftime("%Y-%m-%d")
+        tasks = database.search_task_by_day(final_date)
+        self.task_view.delete(*self.task_view.get_children())
+        for task in tasks:
+            self.task_view.insert('','end', values=(task[0], task[1],task[2], task[4].date()))
 
 
 

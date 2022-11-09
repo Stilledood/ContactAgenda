@@ -194,7 +194,6 @@ def search_task_by_day(date):
     mycursor.execute(sql_query, vals)
     records = mycursor.fetchall()
     mycursor.close()
-    pr
     return records
 
 
