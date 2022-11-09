@@ -197,3 +197,16 @@ def search_task_by_day(date):
     return records
 
 
+def search_task_by_week(start_date, end_date):
+    '''Function to retireve all tasks for the next 7 days starting with today's date'''
+
+    mydb =mysql.connector.connect(host='localhost', user=username, password=password, database='personalagenda')
+    my_cursor = mydb.cursor()
+    sql_query = 'SELECT * FROM events WHERE finalizing_date BETWEEN %s AND %s'
+    vals = (start_date, end_date)
+    my_cursor.execute(sql_query, vals)
+    records = my_cursor.fetchall()
+    my_cursor.close()
+    return records
+
+
