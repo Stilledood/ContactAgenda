@@ -207,6 +207,21 @@ def search_task_by_week(start_date, end_date):
     my_cursor.execute(sql_query, vals)
     records = my_cursor.fetchall()
     my_cursor.close()
+
     return records
+
+
+def search_task_by_month(month, year):
+    '''Function to display all tasks from current month'''
+
+    mydb = mysql.connector.connect(host='localhost', user=username, password=password, database='personalagenda')
+    my_cursor = mydb.cursor()
+    sql_query = "SELECT * FROM events WHERE MONTH(finalizing_date) = %s AND YEAR(finalizing_date) = %s"
+    vals = (month, year)
+    my_cursor.execute(sql_query, vals)
+    records = my_cursor.fetchall()
+    my_cursor.close()
+    return records
+
 
 
