@@ -184,6 +184,17 @@ def delete_event(id):
     mydb.commit()
     my_cursor.close()
 
+def search_task_by_day(date):
+    '''Function to search for task task with due date on a selected day'''
 
+    mydb = mysql.connector.connect(host='localhost', user=username, password=password, database='personalagenda')
+    mycursor = mydb.cursor(buffered=True)
+    sql_query = "SELECT * FROM events WHERE finalizing_date = %s"
+    vals = (date,)
+    mycursor.execute(sql_query, vals)
+    records = mycursor.fetchall()
+    mycursor.close()
+    pr
+    return records
 
 
