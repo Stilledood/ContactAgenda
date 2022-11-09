@@ -162,7 +162,16 @@ def add_event(title, description, finalizing_date):
     mycursor.close()
 
 
+def update_event(id, title, description, date):
+    '''Function to update a task'''
 
+    mydb = mysql.connector.connect(host='localhost', user=username, password=password, database='personalagenda')
+    my_cursor = mydb.cursor()
+    sql_query = "UPDATE events SET title = %s , description = %s, finalizing_date = %s WHERE id = %s"
+    vals=(title, description, date, id)
+    my_cursor.execute(sql_query, vals)
+    mydb.commit()
+    my_cursor.close()
 
 
 
