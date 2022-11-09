@@ -242,8 +242,16 @@ class Tasks(customtkinter.CTkFrame):
         self.calendar.place(relx=0.65, rely=0.03, anchor='ne',relwidth=0.6)
 
         #Adding Meniu button to select tasks(day , week , month)
-        self.task_menu = customtkinter.CTkComboBox(self, values=['Day','Week','Month'])
-        self.task_menu.place(relx=0.975, rely=0.03 ,anchor='ne',relwidth=0.3)
+        self.today_tasks_button = customtkinter.CTkButton(self, text="Today's Tasks", corner_radius=10, border_color='white', bg_color='gray19', fg_color='gray29', text_font=('Futura', 9),border_width=2, command=self.display_day_tasks)
+        self.today_tasks_button.place(relx=0.975, rely=0.03, anchor='ne',relwidth=0.275, relheight=0.035)
+        self.week_task_button = customtkinter.CTkButton(self, text ='Weekly Tasks', corner_radius=10, border_color='white', bg_color='gray19', fg_color='gray29', text_font=('Futura', 9), border_width=2)
+        self.week_task_button.place(relx=0.975, rely=0.08, anchor='ne',relwidth=0.275, relheight=0.035)
+        self.day_search_tasks_button = customtkinter.CTkButton(self,text='Day Search',corner_radius=10, border_color='white', bg_color='gray19', fg_color='gray29', text_font=('Futura', 9),border_width=2)
+        self.day_search_tasks_button.place(relx=0.975, rely=0.13, anchor='ne', relwidth=0.275,relheight=0.035)
+        self.week_search_task_button =customtkinter.CTkButton(self, text='Week Search', corner_radius=10, border_color='white', bg_color='gray19', fg_color='gray29', text_font=('Futura', 9),border_width=2)
+        self.week_search_task_button.place(relx=0.975, rely=0.18, anchor='ne', relwidth=0.275, relheight=0.035)
+        self.month_search_task_button = customtkinter.CTkButton(self, text='Month Search', corner_radius=10, border_color='white', bg_color='gray19', fg_color='gray29', text_font=('Futura', 9),border_width=2)
+        self.month_search_task_button.place(relx=0.975, rely=0.23, anchor='ne', relwidth=0.275, relheight=0.035)
 
         #Adding entries to add/update/delete tasks
         self.task_name_entry = customtkinter.CTkEntry(self, placeholder_text='Title', width=150, height=30, corner_radius=10 )
@@ -263,9 +271,9 @@ class Tasks(customtkinter.CTkFrame):
         self.delete_task_button.place(relx=0.9, rely=0.4, anchor='ne', relwidth=0.3)
 
         #Add button to clear form fields and another one to reset the table view
-        self.clear_form_button= customtkinter.CTkButton(self, text='Clear Form', corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4')
+        self.clear_form_button= customtkinter.CTkButton(self, text='Clear Form', corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4', command=self.clear_form)
         self.clear_form_button.place(relx=0.35, rely=0.5, anchor='ne' ,relwidth=0.3)
-        self.show_all_button =customtkinter.CTkButton(self, text='Show All Tasks' , corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4')
+        self.show_all_button =customtkinter.CTkButton(self, text='Show All Tasks' , corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4', command=self.display_all_tasks)
         self.show_all_button.place(relx = 0.9, rely=0.5, anchor='ne', relwidth=0.3)
 
 
@@ -350,6 +358,43 @@ class Tasks(customtkinter.CTkFrame):
             self.display_all_tasks()
         else:
             return
+
+
+    def display_all_tasks(self):
+
+        tasks = database.fetch_all_events()
+        self.task_view.delete(*self.task_view.get_children())
+        for task in tasks:
+            self.task_view.insert('','end', values=(task[0], task[1], task[2], task[4].date()))
+
+
+    def display_day_tasks(self):
+        date=self.calendar.get_date()
+        lst_date=date.split('/')
+        year = '20'+lst_date[-1]
+        if len(lst_date[0]) == 1:
+            month = '0'+lst_date[0]
+        else:
+            month = lst_date[0]
+        if len(lst_date[1]) == 1:
+            day = '0'+lst_date[1]
+        else:
+            day = lst_date[1]
+        final_date = f"{year}-{month}-{day}"
+
+        tasks = database.search_task_by_day(final_date)
+        self.task_view.delete(*self.task_view.get_children())
+        for task in tasks:
+            self.task_view.insert('','end', values=(task[0], task[1], task[2],task[4].date()))
+
+
+
+
+
+
+
+
+
 
 
 
