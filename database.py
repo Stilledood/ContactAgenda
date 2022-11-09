@@ -173,6 +173,17 @@ def update_event(id, title, description, date):
     mydb.commit()
     my_cursor.close()
 
+def delete_event(id):
+    '''Function to delete a task from events tabel'''
+
+    mydb =mysql.connector.connect(host='localhost', user=username, password=password, database='personalagenda')
+    my_cursor= mydb.cursor()
+    sql_query = 'DELETE FROM events WHERE id = %s'
+    vals = (id,)
+    my_cursor.execute(sql_query, vals)
+    mydb.commit()
+    my_cursor.close()
+
 
 
 
