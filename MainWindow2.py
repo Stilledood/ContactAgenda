@@ -6,6 +6,7 @@ from tkinter import ttk
 import database
 from tkinter import messagebox as mb
 from tkcalendar import Calendar
+from dateutil import parser
 
 customtkinter.set_appearance_mode('dark')
 customtkinter.set_default_color_theme("green")
@@ -255,7 +256,7 @@ class Tasks(customtkinter.CTkFrame):
         #Adding buttons to add/delete/update a task
         self.add_task_button = customtkinter.CTkButton(self, text='Add Tasks', corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4', command=self.add_task)
         self.add_task_button.place(relx=0.9, rely=0.3, anchor='ne',relwidth=0.3)
-        self.update_task_button = customtkinter.CTkButton(self,text='Update Tasks', corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4')
+        self.update_task_button = customtkinter.CTkButton(self,text='Update Tasks', corner_radius=10, border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4', command=self.update_task)
         self.update_task_button.place(relx=0.9, rely=0.35, anchor='ne', relwidth=0.3)
         self.delete_task_button = customtkinter.CTkButton(self, text='Delete Tasks', corner_radius=10,
                                                           border_color='#0E86D4', bg_color='gray19', fg_color='#0E86D4')
@@ -307,6 +308,29 @@ class Tasks(customtkinter.CTkFrame):
         mb.showinfo('Add Task','Task succesfully added')
         self.clear_form()
         self.display_all_tasks()
+
+    def update_task(self):
+
+        id_task =task_id
+        task_title = self.task_name_entry.get()
+        if not task_title:
+            task_title = self.task_name_entry.placeholder_text
+        task_description = self.task_description_entry.get()
+        if not task_description:
+            task_description = self.task_description_entry.placeholder_text
+        task_due_date = self.task_due_date_entry.get()
+        if not task_due_date:
+            task_due_date = self.task_due_date_entry.placeholder_text
+        try:
+            task_due_date = parser.parse(task_due_date)
+        except:
+            mb.showerror('Update Task', 'Date should be in format: Year-Month-Day')
+            return
+
+        database.update_event(id_task, task_title, task_description, task_due_date)
+        self.clear_form()
+        self.display_all_tasks()
+
 
 
 
